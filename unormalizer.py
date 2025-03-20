@@ -10,11 +10,11 @@ def parser():
     p.add_argument('--verbose', action='store_true', help='Verbose mode')
     return p.parse_args()
 
-def find_characters_normalized_to_l(character):
+def find_characters_normalized_to_l(character, format):
     results = []
     for code_point in range(0x110000):  # Unicode range
         char = chr(code_point)
-        normalized = unicodedata.normalize("NFKC", char)
+        normalized = unicodedata.normalize(format, char)
         if normalized == character:
             results.append(char)
     return results
@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     with console.status("[bold green]Convert characters...") as status:
         for character in args.s:
-            special_characters = find_characters_normalized_to_l(character)
+            special_characters = find_characters_normalized_to_l(character, args.f)
             all.append(special_characters)
             if args.verbose:
                 console.log(f"Characters that normalize to {character} :", special_characters)
